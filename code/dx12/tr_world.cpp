@@ -140,7 +140,7 @@ static qboolean	R_CullSurface( surfaceType_t *surface, shader_t *shader ) {
 	}
 
 	sface = ( srfSurfaceFace_t * ) surface;
-	d = DotProduct (tr.or.viewOrigin, sface->plane.normal);
+	d = DotProduct (tr.orient.viewOrigin, sface->plane.normal);
 
 	// don't cull exactly on the plane, because there are levels of rounding
 	// through the BSP, ICD, and hardware that may cause pixel gaps if an
@@ -543,9 +543,6 @@ R_inPVS
 =================
 */
 qboolean R_inPVS( const vec3_t p1, const vec3_t p2 ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-	return qtrue;
-#if 0
 	mnode_t *leaf;
 	byte	*vis;
 
@@ -557,7 +554,6 @@ qboolean R_inPVS( const vec3_t p1, const vec3_t p2 ) {
 		return qfalse;
 	}
 	return qtrue;
-#endif
 }
 
 /*

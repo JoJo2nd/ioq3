@@ -66,8 +66,6 @@ static long generateHashValue( const char *fname, const int size ) {
 }
 
 void R_RemapShader(const char *shaderName, const char *newShaderName, const char *timeOffset) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-#if 0
 	char		strippedName[MAX_QPATH];
 	int			hash;
 	shader_t	*sh, *sh2;
@@ -110,7 +108,6 @@ void R_RemapShader(const char *shaderName, const char *newShaderName, const char
 	if (timeOffset) {
 		sh2->timeOffset = atof(timeOffset);
 	}
-#endif
 }
 
 /*
@@ -640,7 +637,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 			else
 			{
 				imgType_t type = IMGTYPE_COLORALPHA;
-				imgFlags_t flags = IMGFLAG_NONE;
+				uint32_t flags = IMGFLAG_NONE;
 
 				if (!shader.noMipMaps)
 					flags |= IMGFLAG_MIPMAP;
@@ -648,7 +645,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 				if (!shader.noPicMip)
 					flags |= IMGFLAG_PICMIP;
 
-				stage->bundle[0].image[0] = R_FindImageFile( token, type, flags );
+				stage->bundle[0].image[0] = R_FindImageFile( token, type, imgFlags_t(flags) );
 
 				if ( !stage->bundle[0].image[0] )
 				{
@@ -663,7 +660,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 		else if ( !Q_stricmp( token, "clampmap" ) )
 		{
 			imgType_t type = IMGTYPE_COLORALPHA;
-			imgFlags_t flags = IMGFLAG_CLAMPTOEDGE;
+			uint32_t flags = IMGFLAG_CLAMPTOEDGE;
 
 			token = COM_ParseExt( text, qfalse );
 			if ( !token[0] )
@@ -678,7 +675,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 			if (!shader.noPicMip)
 				flags |= IMGFLAG_PICMIP;
 
-			stage->bundle[0].image[0] = R_FindImageFile( token, type, flags );
+			stage->bundle[0].image[0] = R_FindImageFile( token, type, imgFlags_t(flags) );
 			if ( !stage->bundle[0].image[0] )
 			{
 				ri.Printf( PRINT_WARNING, "WARNING: R_FindImageFile could not find '%s' in shader '%s'\n", token, shader.name );
@@ -710,7 +707,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 				}
 				num = stage->bundle[0].numImageAnimations;
 				if ( num < MAX_IMAGE_ANIMATIONS ) {
-					imgFlags_t flags = IMGFLAG_NONE;
+					uint32_t flags = IMGFLAG_NONE;
 
 					if (!shader.noMipMaps)
 						flags |= IMGFLAG_MIPMAP;
@@ -718,7 +715,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 					if (!shader.noPicMip)
 						flags |= IMGFLAG_PICMIP;
 
-					stage->bundle[0].image[num] = R_FindImageFile( token, IMGTYPE_COLORALPHA, flags );
+					stage->bundle[0].image[num] = R_FindImageFile( token, IMGTYPE_COLORALPHA, imgFlags_t(flags) );
 					if ( !stage->bundle[0].image[num] )
 					{
 						ri.Printf( PRINT_WARNING, "WARNING: R_FindImageFile could not find '%s' in shader '%s'\n", token, shader.name );
@@ -1148,7 +1145,7 @@ static void ParseDeform( char **text ) {
 		if ( n < 0 || n > 7 ) {
 			n = 0;
 		}
-		ds->deformation = DEFORM_TEXT0 + n;
+		ds->deformation = deform_t((DEFORM_TEXT0) + n);
 		return;
 	}
 
@@ -1257,10 +1254,10 @@ skyParms <outerbox> <cloudheight> <innerbox>
 */
 static void ParseSkyParms( char **text ) {
 	char		*token;
-	static char	*suf[6] = {"rt", "bk", "lf", "ft", "up", "dn"};
+	static char	const* suf[6] = {"rt", "bk", "lf", "ft", "up", "dn"};
 	char		pathname[MAX_QPATH];
 	int			i;
-	imgFlags_t imgFlags = IMGFLAG_MIPMAP | IMGFLAG_PICMIP;
+	imgFlags_t imgFlags = imgFlags_t(IMGFLAG_MIPMAP | IMGFLAG_PICMIP);
 
 	// outerbox
 	token = COM_ParseExt( text, qfalse );
@@ -1272,7 +1269,7 @@ static void ParseSkyParms( char **text ) {
 		for (i=0 ; i<6 ; i++) {
 			Com_sprintf( pathname, sizeof(pathname), "%s_%s.tga"
 				, token, suf[i] );
-			shader.sky.outerbox[i] = R_FindImageFile( ( char * ) pathname, IMGTYPE_COLORALPHA, imgFlags | IMGFLAG_CLAMPTOEDGE );
+			shader.sky.outerbox[i] = R_FindImageFile( ( char * ) pathname, IMGTYPE_COLORALPHA, imgFlags_t(imgFlags | IMGFLAG_CLAMPTOEDGE) );
 
 			if ( !shader.sky.outerbox[i] ) {
 				shader.sky.outerbox[i] = tr.defaultImage;
@@ -1356,7 +1353,7 @@ void ParseSort( char **text ) {
 // this table is also present in q3map
 
 typedef struct {
-	char	*name;
+	char const* name;
 	int		clearSolid, surfaceFlags, contents;
 } infoParm_t;
 
@@ -1815,10 +1812,6 @@ static qboolean CollapseMultitexture( void ) {
 	int i;
 	textureBundle_t tmpBundle;
 
-	if ( !qglActiveTextureARB ) {
-		return qfalse;
-	}
-
 	// make sure both stages are active
 	if ( !stages[0].active || !stages[1].active ) {
 		return qfalse;
@@ -2045,7 +2038,7 @@ static shader_t *GeneratePermanentShader( void ) {
 		return tr.defaultShader;
 	}
 
-	newShader = ri.Hunk_Alloc( sizeof( shader_t ), h_low );
+	newShader = (shader_t*)ri.Hunk_Alloc( sizeof( shader_t ), h_low );
 
 	*newShader = shader;
 
@@ -2067,12 +2060,12 @@ static shader_t *GeneratePermanentShader( void ) {
 		if ( !stages[i].active ) {
 			break;
 		}
-		newShader->stages[i] = ri.Hunk_Alloc( sizeof( stages[i] ), h_low );
+		newShader->stages[i] = (shaderStage_t*)ri.Hunk_Alloc( sizeof( stages[i] ), h_low );
 		*newShader->stages[i] = stages[i];
 
 		for ( b = 0 ; b < NUM_TEXTURE_BUNDLES ; b++ ) {
 			size = newShader->stages[i]->bundle[b].numTexMods * sizeof( texModInfo_t );
-			newShader->stages[i]->bundle[b].texMods = ri.Hunk_Alloc( size, h_low );
+			newShader->stages[i]->bundle[b].texMods = (texModInfo_t*)ri.Hunk_Alloc( size, h_low );
 			Com_Memcpy( newShader->stages[i]->bundle[b].texMods, stages[i].bundle[b].texMods, size );
 		}
 	}
@@ -2585,7 +2578,7 @@ shader_t *R_FindShader( const char *name, int lightmapIndex, qboolean mipRawImag
 	// look for a single supported image file
 	//
 	{
-		imgFlags_t flags;
+		uint32_t flags;
 
 		flags = IMGFLAG_NONE;
 
@@ -2598,7 +2591,7 @@ shader_t *R_FindShader( const char *name, int lightmapIndex, qboolean mipRawImag
 			flags |= IMGFLAG_CLAMPTOEDGE;
 		}
 
-		image = R_FindImageFile( name, IMGTYPE_COLORALPHA, flags );
+		image = R_FindImageFile( name, IMGTYPE_COLORALPHA, imgFlags_t(flags) );
 		if ( !image ) {
 			ri.Printf( PRINT_DEVELOPER, "Couldn't find image file for shader %s\n", name );
 			shader.defaultShader = qtrue;
@@ -2800,9 +2793,6 @@ way to ask for different implicit lighting modes (vertex, lightmap, etc)
 ====================
 */
 qhandle_t RE_RegisterShader( const char *name ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-	return 0;
-#if 0
 	shader_t	*sh;
 
 	if ( strlen( name ) >= MAX_QPATH ) {
@@ -2822,7 +2812,6 @@ qhandle_t RE_RegisterShader( const char *name ) {
 	}
 
 	return sh->index;
-#endif
 }
 
 
@@ -2834,9 +2823,6 @@ For menu graphics that should never be picmiped
 ====================
 */
 qhandle_t RE_RegisterShaderNoMip( const char *name ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-	return 0;
-#if 0
 	shader_t	*sh;
 
 	if ( strlen( name ) >= MAX_QPATH ) {
@@ -2856,7 +2842,6 @@ qhandle_t RE_RegisterShaderNoMip( const char *name ) {
 	}
 
 	return sh->index;
-#endif
 }
 
 /*
@@ -3038,7 +3023,7 @@ static void ScanAndLoadShaderFiles( void )
 	}
 
 	// build single large buffer
-	s_shaderText = ri.Hunk_Alloc( sum + numShaderFiles*2, h_low );
+	s_shaderText = (char*)ri.Hunk_Alloc( sum + numShaderFiles*2, h_low );
 	s_shaderText[ 0 ] = '\0';
 	textEnd = s_shaderText;
  
@@ -3078,7 +3063,7 @@ static void ScanAndLoadShaderFiles( void )
 
 	size += MAX_SHADERTEXT_HASH;
 
-	hashMem = ri.Hunk_Alloc( size * sizeof(char *), h_low );
+	hashMem = (char*)ri.Hunk_Alloc( size * sizeof(char *), h_low );
 
 	for (i = 0; i < MAX_SHADERTEXT_HASH; i++) {
 		shaderTextHashTable[i] = (char **) hashMem;

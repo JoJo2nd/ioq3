@@ -97,7 +97,7 @@ void R_AddPolygonSurfaces( void ) {
 
 	for ( i = 0, poly = tr.refdef.polys; i < tr.refdef.numPolys ; i++, poly++ ) {
 		sh = R_GetShaderByHandle( poly->hShader );
-		R_AddDrawSurf( ( void * )poly, sh, poly->fogIndex, qfalse );
+		R_AddDrawSurf( ( surfaceType_t * )poly, sh, poly->fogIndex, qfalse );
 	}
 }
 
@@ -108,8 +108,6 @@ RE_AddPolyToScene
 =====================
 */
 void RE_AddPolyToScene( qhandle_t hShader, int numVerts, const polyVert_t *verts, int numPolys ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-#if 0
 	srfPoly_t	*poly;
 	int			i, j;
 	int			fogIndex;
@@ -186,7 +184,6 @@ void RE_AddPolyToScene( qhandle_t hShader, int numVerts, const polyVert_t *verts
 		}
 		poly->fogIndex = fogIndex;
 	}
-#endif
 }
 
 
@@ -200,8 +197,6 @@ RE_AddRefEntityToScene
 =====================
 */
 void RE_AddRefEntityToScene( const refEntity_t *ent ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-#if 0
 	if ( !tr.registered ) {
 		return;
 	}
@@ -225,7 +220,6 @@ void RE_AddRefEntityToScene( const refEntity_t *ent ) {
 	backEndData->entities[r_numentities].lightingCalculated = qfalse;
 
 	r_numentities++;
-#endif
 }
 
 
@@ -267,10 +261,7 @@ RE_AddLightToScene
 =====================
 */
 void RE_AddLightToScene( const vec3_t org, float intensity, float r, float g, float b ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-#if 0
 	RE_AddDynamicLightToScene( org, intensity, r, g, b, qfalse );
-#endif
 }
 
 /*
@@ -280,10 +271,7 @@ RE_AddAdditiveLightToScene
 =====================
 */
 void RE_AddAdditiveLightToScene( const vec3_t org, float intensity, float r, float g, float b ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-#if 0
 	RE_AddDynamicLightToScene( org, intensity, r, g, b, qtrue );
-#endif
 }
 
 /*
@@ -298,15 +286,13 @@ to handle mirrors,
 @@@@@@@@@@@@@@@@@@@@@
 */
 void RE_RenderScene( const refdef_t *fd ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-#if 0
 	viewParms_t		parms;
 	int				startTime;
 
 	if ( !tr.registered ) {
 		return;
 	}
-	GLimp_LogComment( "====== RE_RenderScene =====\n" );
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__); //GLimp_LogComment( "====== RE_RenderScene =====\n" );
 
 	if ( r_norefresh->integer ) {
 		return;
@@ -406,10 +392,10 @@ void RE_RenderScene( const refdef_t *fd ) {
 	
 	parms.stereoFrame = tr.refdef.stereoFrame;
 
-	VectorCopy( fd->vieworg, parms.or.origin );
-	VectorCopy( fd->viewaxis[0], parms.or.axis[0] );
-	VectorCopy( fd->viewaxis[1], parms.or.axis[1] );
-	VectorCopy( fd->viewaxis[2], parms.or.axis[2] );
+	VectorCopy( fd->vieworg, parms.orient.origin );
+	VectorCopy( fd->viewaxis[0], parms.orient.axis[0] );
+	VectorCopy( fd->viewaxis[1], parms.orient.axis[1] );
+	VectorCopy( fd->viewaxis[2], parms.orient.axis[2] );
 
 	VectorCopy( fd->vieworg, parms.pvsOrigin );
 
@@ -422,5 +408,4 @@ void RE_RenderScene( const refdef_t *fd ) {
 	r_firstScenePoly = r_numpolys;
 
 	tr.frontEndMsec += ri.Milliseconds() - startTime;
-#endif
 }

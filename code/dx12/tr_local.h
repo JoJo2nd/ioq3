@@ -28,10 +28,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../qcommon/qfiles.h"
 #include "../qcommon/qcommon.h"
 #include "../renderercommon/tr_public.h"
-
-// TODO: remove
-typedef unsigned int GLuint;
-typedef int GLint;
+#include "../renderercommon/iqm.h"
 
 typedef enum
 {
@@ -1227,6 +1224,10 @@ int R_CullLocalPointAndRadius( vec3_t origin, float radius );
 void R_SetupProjection(viewParms_t *dest, float zProj, qboolean computeFrustum);
 void R_RotateForEntity( const trRefEntity_t *ent, const viewParms_t *viewParms, orientationr_t *orient );
 
+#define GL_MODULATE 0x2100 //TODO: stub remove
+#define GL_ADD					0x0104 //TODO: stub remove
+#define GL_DECAL				0x2101 //TODO: stub remove
+
 #define GLS_SRCBLEND_ZERO						0x00000001
 #define GLS_SRCBLEND_ONE						0x00000002
 #define GLS_SRCBLEND_DST_COLOR					0x00000003
@@ -1715,5 +1716,89 @@ void LerpMeshVertexes_altivec( md3Surface_t *surf, float backlerp );
 void ProjectDlightTexture_altivec( void );
 void RB_CalcDiffuseColor_altivec( unsigned char *colors );
 #endif
+
+// Image formats, temp until I sort them out
+#define DX12_SRGB_EXT                       0x8C40
+#define DX12_SRGB8_EXT                      0x8C41
+#define DX12_SRGB_ALPHA_EXT                 0x8C42
+#define DX12_SRGB8_ALPHA8_EXT               0x8C43
+#define DX12_SLUMINANCE_ALPHA_EXT           0x8C44
+#define DX12_SLUMINANCE8_ALPHA8_EXT         0x8C45
+#define DX12_SLUMINANCE_EXT                 0x8C46
+#define DX12_SLUMINANCE8_EXT                0x8C47
+#define DX12_COMPRESSED_SRGB_EXT            0x8C48
+#define DX12_COMPRESSED_SRGB_ALPHA_EXT      0x8C49
+#define DX12_COMPRESSED_SLUMINANCE_EXT      0x8C4A
+#define DX12_COMPRESSED_SLUMINANCE_ALPHA_EXT 0x8C4B
+#define DX12_COMPRESSED_SRGB_S3TC_DXT1_EXT  0x8C4C
+#define DX12_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT 0x8C4D
+#define DX12_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT 0x8C4E
+#define DX12_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT 0x8C4F
+
+#define DX12_COMPRESSED_RGBA_BPTC_UNORM_ARB 0x8E8C
+#define DX12_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB 0x8E8D
+#define DX12_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB 0x8E8E
+#define DX12_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB 0x8E8F
+
+#define DX12_COMPRESSED_LUMINANCE_LATC1_EXT 0x8C70
+#define DX12_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT 0x8C71
+#define DX12_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT 0x8C72
+#define DX12_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT 0x8C73
+
+#define DX12_ALPHA4				0x803B
+#define DX12_ALPHA8				0x803C
+#define DX12_ALPHA12				0x803D
+#define DX12_ALPHA16				0x803E
+#define DX12_LUMINANCE4				0x803F
+#define DX12_LUMINANCE8				0x8040
+#define DX12_LUMINANCE12				0x8041
+#define DX12_LUMINANCE16				0x8042
+#define DX12_LUMINANCE4_ALPHA4			0x8043
+#define DX12_LUMINANCE6_ALPHA2			0x8044
+#define DX12_LUMINANCE8_ALPHA8			0x8045
+#define DX12_LUMINANCE12_ALPHA4			0x8046
+#define DX12_LUMINANCE12_ALPHA12			0x8047
+#define DX12_LUMINANCE16_ALPHA16			0x8048
+#define DX12_INTENSITY				0x8049
+#define DX12_INTENSITY4				0x804A
+#define DX12_INTENSITY8				0x804B
+#define DX12_INTENSITY12				0x804C
+#define DX12_INTENSITY16				0x804D
+#define DX12_R3_G3_B2				0x2A10
+#define DX12_RGB4					0x804F
+#define DX12_RGB5					0x8050
+#define DX12_RGB8					0x8051
+#define DX12_RGB10				0x8052
+#define DX12_RGB12				0x8053
+#define DX12_RGB16				0x8054
+#define DX12_RGBA2				0x8055
+#define DX12_RGBA4				0x8056
+#define DX12_RGB5_A1				0x8057
+#define DX12_RGBA8				0x8058
+#define DX12_RGB10_A2				0x8059
+#define DX12_RGBA12				0x805A
+#define DX12_RGBA16				0x805B
+
+#define DX12_COMPRESSED_RGB_S3TC_DXT1_EXT   0x83F0
+#define DX12_COMPRESSED_RGBA_S3TC_DXT1_EXT  0x83F1
+#define DX12_COMPRESSED_RGBA_S3TC_DXT3_EXT  0x83F2
+#define DX12_COMPRESSED_RGBA_S3TC_DXT5_EXT  0x83F3
+
+#define DX12_RGB_S3TC                       0x83A0
+#define DX12_RGB4_S3TC                      0x83A1
+#define DX12_RGBA_S3TC                      0x83A2
+#define DX12_RGBA4_S3TC                     0x83A3
+#define DX12_RGBA_DXT5_S3TC                 0x83A4
+#define DX12_RGBA4_DXT5_S3TC                0x83A5
+
+#define DX12_RGB					0x1907
+#define DX12_RGBA					0x1908
+
+#define DX12_RED					0x1903
+#define DX12_GREEN				0x1904
+#define DX12_BLUE					0x1905
+#define DX12_ALPHA				0x1906
+#define DX12_LUMINANCE				0x1909
+#define DX12_LUMINANCE_ALPHA			0x190A
 
 #endif //TR_LOCAL_H

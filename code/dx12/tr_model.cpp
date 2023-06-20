@@ -184,7 +184,7 @@ qhandle_t R_RegisterIQM(const char *name, model_t *mod)
 
 typedef struct
 {
-	char *ext;
+	char const* ext;
 	qhandle_t (*ModelLoader)( const char *, model_t * );
 } modelExtToLoaderMap_t;
 
@@ -229,7 +229,7 @@ model_t *R_AllocModel( void ) {
 		return NULL;
 	}
 
-	mod = ri.Hunk_Alloc( sizeof( *tr.models[tr.numModels] ), h_low );
+	mod = (model_t*)ri.Hunk_Alloc( sizeof( *tr.models[tr.numModels] ), h_low );
 	mod->index = tr.numModels;
 	tr.models[tr.numModels] = mod;
 	tr.numModels++;
@@ -250,9 +250,6 @@ asked for again.
 ====================
 */
 qhandle_t RE_RegisterModel( const char *name ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-	return 0;
-#if 0
 	model_t		*mod;
 	qhandle_t	hModel;
 	qboolean	orgNameFailed = qfalse;
@@ -365,7 +362,6 @@ qhandle_t RE_RegisterModel( const char *name ) {
 	}
 
 	return hModel;
-#endif
 }
 
 /*
@@ -398,7 +394,7 @@ static qboolean R_LoadMD3 (model_t *mod, int lod, void *buffer, const char *mod_
 	mod->type = MOD_MESH;
 	size = LittleLong(pinmodel->ofsEnd);
 	mod->dataSize += size;
-	mod->md3[lod] = ri.Hunk_Alloc( size, h_low );
+	mod->md3[lod] = (md3Header_t*)ri.Hunk_Alloc( size, h_low );
 
 	Com_Memcpy (mod->md3[lod], buffer, LittleLong(pinmodel->ofsEnd) );
 
@@ -591,7 +587,7 @@ static qboolean R_LoadMDR( model_t *mod, void *buffer, int filesize, const char 
 	}
 
 	mod->dataSize += size;
-	mod->modelData = mdr = ri.Hunk_Alloc( size, h_low );
+	mod->modelData = mdr = (mdrHeader_t*)ri.Hunk_Alloc( size, h_low );
 
 	// Copy all the values over from the file and fix endian issues in the process, if necessary.
 	
@@ -1021,9 +1017,6 @@ R_LerpTag
 */
 int R_LerpTag( orientation_t *tag, qhandle_t handle, int startFrame, int endFrame, 
 					 float frac, const char *tagName ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-	return 0;
-#if 0
 	md3Tag_t	*start, *end;
 	md3Tag_t	start_space, end_space;
 	int		i;
@@ -1039,7 +1032,7 @@ int R_LerpTag( orientation_t *tag, qhandle_t handle, int startFrame, int endFram
 			end = R_GetAnimTag((mdrHeader_t *) model->modelData, endFrame, tagName, &end_space);
 		}
 		else if( model->type == MOD_IQM ) {
-			return R_IQMLerpTag( tag, model->modelData,
+			return R_IQMLerpTag( tag, (iqmData_t*)model->modelData,
 					startFrame, endFrame,
 					frac, tagName );
 		} else {
@@ -1071,7 +1064,6 @@ int R_LerpTag( orientation_t *tag, qhandle_t handle, int startFrame, int endFram
 	VectorNormalize( tag->axis[1] );
 	VectorNormalize( tag->axis[2] );
 	return qtrue;
-#endif
 }
 
 
@@ -1081,8 +1073,6 @@ R_ModelBounds
 ====================
 */
 void R_ModelBounds( qhandle_t handle, vec3_t mins, vec3_t maxs ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-#if 0
 	model_t		*model;
 
 	model = R_GetModelByHandle( handle );
@@ -1117,7 +1107,7 @@ void R_ModelBounds( qhandle_t handle, vec3_t mins, vec3_t maxs ) {
 	} else if(model->type == MOD_IQM) {
 		iqmData_t *iqmData;
 		
-		iqmData = model->modelData;
+		iqmData = (iqmData_t*)model->modelData;
 
 		if(iqmData->bounds)
 		{
@@ -1129,5 +1119,4 @@ void R_ModelBounds( qhandle_t handle, vec3_t mins, vec3_t maxs ) {
 
 	VectorClear( mins );
 	VectorClear( maxs );
-#endif
 }

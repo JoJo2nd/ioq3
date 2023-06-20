@@ -37,6 +37,7 @@ R_ArrayElementDiscrete
 This is just for OpenGL conformance testing, it should never be the fastest
 ================
 */
+/*
 static void APIENTRY R_ArrayElementDiscrete( GLint index ) {
 	qglColor4ubv( tess.svars.colors[ index ] );
 	if ( glState.currenttmu ) {
@@ -47,6 +48,7 @@ static void APIENTRY R_ArrayElementDiscrete( GLint index ) {
 	}
 	qglVertex3fv( tess.xyz[ index ] );
 }
+*/
 
 /*
 ===================
@@ -54,6 +56,7 @@ R_DrawStripElements
 
 ===================
 */
+/*
 static int		c_vertexes;		// for seeing how long our average strips are
 static int		c_begins;
 static void R_DrawStripElements( int numIndexes, const glIndex_t *indexes, void ( APIENTRY *element )(GLint) ) {
@@ -148,7 +151,7 @@ static void R_DrawStripElements( int numIndexes, const glIndex_t *indexes, void 
 
 	qglEnd();
 }
-
+//*/
 
 
 /*
@@ -160,7 +163,9 @@ instead of using the single glDrawElements call that may be inefficient
 without compiled vertex arrays.
 ==================
 */
-void R_DrawElements( int numIndexes, const glIndex_t *indexes ) {
+void R_DrawElements( int numIndexes, const dx12Index_t* indexes ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	int		primitives;
 
 	primitives = r_primitives->integer;
@@ -194,6 +199,7 @@ void R_DrawElements( int numIndexes, const glIndex_t *indexes ) {
 	}
 
 	// anything else will cause no drawing
+#endif
 }
 
 
@@ -224,7 +230,7 @@ static void R_BindAnimatedImage( textureBundle_t *bundle ) {
 	}
 
 	if ( bundle->numImageAnimations <= 1 ) {
-		GL_Bind( bundle->image[0] );
+		ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__); //GL_Bind( bundle->image[0] );
 		return;
 	}
 
@@ -243,7 +249,7 @@ static void R_BindAnimatedImage( textureBundle_t *bundle ) {
 		index -= bundle->numImageAnimations;
 	}
 
-	GL_Bind( bundle->image[ index ] );
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__); //GL_Bind( bundle->image[ index ] );
 }
 
 /*
@@ -254,6 +260,8 @@ Draws triangle outlines for debugging
 ================
 */
 static void DrawTris (shaderCommands_t *input) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	GL_Bind( tr.whiteImage );
 	qglColor3f (1,1,1);
 
@@ -277,6 +285,7 @@ static void DrawTris (shaderCommands_t *input) {
 		GLimp_LogComment( "glUnlockArraysEXT\n" );
 	}
 	qglDepthRange( 0, 1 );
+#endif
 }
 
 
@@ -288,6 +297,8 @@ Draws vertex normals for debugging
 ================
 */
 static void DrawNormals (shaderCommands_t *input) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	int		i;
 	vec3_t	temp;
 
@@ -305,6 +316,7 @@ static void DrawNormals (shaderCommands_t *input) {
 	qglEnd ();
 
 	qglDepthRange( 0, 1 );
+#endif
 }
 
 /*
@@ -348,6 +360,8 @@ t1 = most downstream according to spec
 ===================
 */
 static void DrawMultitextured( shaderCommands_t *input, int stage ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	shaderStage_t	*pStage;
 
 	pStage = tess.xstages[stage];
@@ -393,6 +407,7 @@ static void DrawMultitextured( shaderCommands_t *input, int stage ) {
 	qglDisable( GL_TEXTURE_2D );
 
 	GL_SelectTexture( 0 );
+#endif
 }
 
 
@@ -405,6 +420,8 @@ Perform dynamic lighting with another rendering pass
 ===================
 */
 static void ProjectDlightTexture_scalar( void ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	int		i, l;
 	vec3_t	origin;
 	float	*texCoords;
@@ -554,6 +571,7 @@ static void ProjectDlightTexture_scalar( void ) {
 		backEnd.pc.c_totalIndexes += numIndexes;
 		backEnd.pc.c_dlightIndexes += numIndexes;
 	}
+#endif
 }
 
 static void ProjectDlightTexture( void ) {
@@ -576,6 +594,8 @@ Blends a fog texture on top of everything else
 ===================
 */
 static void RB_FogPass( void ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	fog_t		*fog;
 	int			i;
 
@@ -602,6 +622,7 @@ static void RB_FogPass( void ) {
 	}
 
 	R_DrawElements( tess.numIndexes, tess.indexes );
+#endif
 }
 
 /*
@@ -752,7 +773,7 @@ static void ComputeColors( shaderStage_t *pStage )
 				float len;
 				vec3_t v;
 
-				VectorSubtract( tess.xyz[i], backEnd.viewParms.or.origin, v );
+				VectorSubtract( tess.xyz[i], backEnd.viewParms.orient.origin, v );
 				len = VectorLength( v );
 
 				len /= tess.shader->portalRange;
@@ -940,13 +961,14 @@ static void RB_IterateStagesGeneric( shaderCommands_t *input )
 
 		ComputeColors( pStage );
 		ComputeTexCoords( pStage );
-
+		ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 		if ( !setArraysOnce )
 		{
 			qglEnableClientState( GL_COLOR_ARRAY );
 			qglColorPointer( 4, GL_UNSIGNED_BYTE, 0, input->svars.colors );
 		}
-
+#endif
 		//
 		// do multitexture
 		//
@@ -956,17 +978,20 @@ static void RB_IterateStagesGeneric( shaderCommands_t *input )
 		}
 		else
 		{
+			ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 			if ( !setArraysOnce )
 			{
 				qglTexCoordPointer( 2, GL_FLOAT, 0, input->svars.texcoords[0] );
 			}
+#endif
 
 			//
 			// set state
 			//
 			R_BindAnimatedImage( &pStage->bundle[0] );
 
-			GL_State( pStage->stateBits );
+			ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);//GL_State( pStage->stateBits );
 
 			//
 			// draw
@@ -987,6 +1012,8 @@ static void RB_IterateStagesGeneric( shaderCommands_t *input )
 */
 void RB_StageIteratorGeneric( void )
 {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	shaderCommands_t *input;
 	shader_t		*shader;
 
@@ -1095,6 +1122,7 @@ void RB_StageIteratorGeneric( void )
 	{
 		qglDisable( GL_POLYGON_OFFSET_FILL );
 	}
+#endif
 }
 
 
@@ -1103,6 +1131,8 @@ void RB_StageIteratorGeneric( void )
 */
 void RB_StageIteratorVertexLitTexture( void )
 {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	shaderCommands_t *input;
 	shader_t		*shader;
 
@@ -1174,11 +1204,14 @@ void RB_StageIteratorVertexLitTexture( void )
 		qglUnlockArraysEXT();
 		GLimp_LogComment( "glUnlockArraysEXT\n" );
 	}
+#endif
 }
 
 //define	REPLACE_MODE
 
 void RB_StageIteratorLightmappedMultitexture( void ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	shaderCommands_t *input;
 	shader_t		*shader;
 
@@ -1280,6 +1313,7 @@ void RB_StageIteratorLightmappedMultitexture( void ) {
 		qglUnlockArraysEXT();
 		GLimp_LogComment( "glUnlockArraysEXT\n" );
 	}
+#endif
 }
 
 /*
@@ -1336,6 +1370,6 @@ void RB_EndSurface( void ) {
 	// clear shader so we can tell we don't have any unclosed surfaces
 	tess.numIndexes = 0;
 
-	GLimp_LogComment( "----------\n" );
+	//GLimp_LogComment( "----------\n" );
 }
 

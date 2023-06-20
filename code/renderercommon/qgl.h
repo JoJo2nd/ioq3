@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ** QGL.H
 */
 
-#ifndef __QGL_H__
+#if !defined(__QGL_H__) && !defined(QDX12)
 #define __QGL_H__
 
 #ifdef USE_LOCAL_HEADERS

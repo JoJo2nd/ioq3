@@ -39,6 +39,8 @@ static float	s_flipMatrix[16] = {
 ** GL_Bind
 */
 void GL_Bind( image_t *image ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	int texnum;
 
 	if ( !image ) {
@@ -59,6 +61,7 @@ void GL_Bind( image_t *image ) {
 		glState.currenttextures[glState.currenttmu] = texnum;
 		qglBindTexture (GL_TEXTURE_2D, texnum);
 	}
+#endif
 }
 
 /*
@@ -66,6 +69,8 @@ void GL_Bind( image_t *image ) {
 */
 void GL_SelectTexture( int unit )
 {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	if ( glState.currenttmu == unit )
 	{
 		return;
@@ -89,6 +94,7 @@ void GL_SelectTexture( int unit )
 	}
 
 	glState.currenttmu = unit;
+#endif
 }
 
 
@@ -96,6 +102,8 @@ void GL_SelectTexture( int unit )
 ** GL_BindMultitexture
 */
 void GL_BindMultitexture( image_t *image0, GLuint env0, image_t *image1, GLuint env1 ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	int		texnum0, texnum1;
 
 	texnum0 = image0->texnum;
@@ -117,6 +125,7 @@ void GL_BindMultitexture( image_t *image0, GLuint env0, image_t *image1, GLuint 
 		glState.currenttextures[0] = texnum0;
 		qglBindTexture( GL_TEXTURE_2D, texnum0 );
 	}
+#endif
 }
 
 
@@ -124,6 +133,7 @@ void GL_BindMultitexture( image_t *image0, GLuint env0, image_t *image1, GLuint 
 ** GL_Cull
 */
 void GL_Cull( int cullType ) {
+#if 0
 	if ( glState.faceCulling == cullType ) {
 		return;
 	}
@@ -147,6 +157,7 @@ void GL_Cull( int cullType ) {
 
 		qglCullFace( cullFront ? GL_FRONT : GL_BACK );
 	}
+#endif
 }
 
 /*
@@ -154,6 +165,8 @@ void GL_Cull( int cullType ) {
 */
 void GL_TexEnv( int env )
 {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	if ( env == glState.texEnv[glState.currenttmu] )
 	{
 		return;
@@ -180,6 +193,7 @@ void GL_TexEnv( int env )
 		ri.Error( ERR_DROP, "GL_TexEnv: invalid env '%d' passed", env );
 		break;
 	}
+#endif
 }
 
 /*
@@ -190,6 +204,8 @@ void GL_TexEnv( int env )
 */
 void GL_State( unsigned long stateBits )
 {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	unsigned long diff = stateBits ^ glState.glStateBits;
 
 	if ( !diff )
@@ -369,6 +385,7 @@ void GL_State( unsigned long stateBits )
 	}
 
 	glState.glStateBits = stateBits;
+#endif
 }
 
 
@@ -381,6 +398,8 @@ A player has predicted a teleport, but hasn't arrived yet
 ================
 */
 static void RB_Hyperspace( void ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	float		c;
 
 	if ( !backEnd.isHyperspace ) {
@@ -392,10 +411,13 @@ static void RB_Hyperspace( void ) {
 	qglClear( GL_COLOR_BUFFER_BIT );
 
 	backEnd.isHyperspace = qtrue;
+#endif
 }
 
 
 static void SetViewportAndScissor( void ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	qglMatrixMode(GL_PROJECTION);
 	qglLoadMatrixf( backEnd.viewParms.projectionMatrix );
 	qglMatrixMode(GL_MODELVIEW);
@@ -405,6 +427,7 @@ static void SetViewportAndScissor( void ) {
 		backEnd.viewParms.viewportWidth, backEnd.viewParms.viewportHeight );
 	qglScissor( backEnd.viewParms.viewportX, backEnd.viewParms.viewportY, 
 		backEnd.viewParms.viewportWidth, backEnd.viewParms.viewportHeight );
+#endif
 }
 
 /*
@@ -416,6 +439,8 @@ to actually render the visible surfaces for this view
 =================
 */
 void RB_BeginDrawingView (void) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	int clearBits = 0;
 
 	// sync with gl if needed
@@ -492,6 +517,7 @@ void RB_BeginDrawingView (void) {
 	} else {
 		qglDisable (GL_CLIP_PLANE0);
 	}
+#endif
 }
 
 
@@ -501,6 +527,8 @@ RB_RenderDrawSurfList
 ==================
 */
 void RB_RenderDrawSurfList( drawSurf_t *drawSurfs, int numDrawSurfs ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	shader_t		*shader, *oldShader;
 	int				fogNum, oldFogNum;
 	int				entityNum, oldEntityNum;
@@ -678,6 +706,7 @@ void RB_RenderDrawSurfList( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 
 	// add light flares on lights that aren't obscured
 	RB_RenderFlares();
+#endif
 }
 
 
@@ -696,6 +725,8 @@ RB_SetGL2D
 ================
 */
 void	RB_SetGL2D (void) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	backEnd.projection2D = qtrue;
 
 	// set 2D virtual screen size
@@ -717,6 +748,7 @@ void	RB_SetGL2D (void) {
 	// set time for 2D shaders
 	backEnd.refdef.time = ri.Milliseconds();
 	backEnd.refdef.floatTime = backEnd.refdef.time * 0.001;
+#endif
 }
 
 
@@ -941,7 +973,8 @@ const void	*RB_DrawBuffer( const void *data ) {
 	const drawBufferCommand_t	*cmd;
 
 	cmd = (const drawBufferCommand_t *)data;
-
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	qglDrawBuffer( cmd->buffer );
 
 	// clear screen for debugging
@@ -949,7 +982,7 @@ const void	*RB_DrawBuffer( const void *data ) {
 		qglClearColor( 1, 0, 0.5, 1 );
 		qglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	}
-
+#endif
 	return (const void *)(cmd + 1);
 }
 
@@ -972,7 +1005,8 @@ void RB_ShowImages( void ) {
 	if ( !backEnd.projection2D ) {
 		RB_SetGL2D();
 	}
-
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	qglClear( GL_COLOR_BUFFER_BIT );
 
 	qglFinish();
@@ -1010,7 +1044,7 @@ void RB_ShowImages( void ) {
 
 	end = ri.Milliseconds();
 	ri.Printf( PRINT_ALL, "%i msec to draw all images\n", end - start );
-
+#endif
 }
 
 /*
@@ -1021,10 +1055,12 @@ RB_ColorMask
 */
 const void *RB_ColorMask(const void *data)
 {
-	const colorMaskCommand_t *cmd = data;
+	const colorMaskCommand_t *cmd = (colorMaskCommand_t const*)data;
 	
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	qglColorMask(cmd->rgba[0], cmd->rgba[1], cmd->rgba[2], cmd->rgba[3]);
-	
+#endif
 	return (const void *)(cmd + 1);
 }
 
@@ -1036,7 +1072,7 @@ RB_ClearDepth
 */
 const void *RB_ClearDepth(const void *data)
 {
-	const clearDepthCommand_t *cmd = data;
+	const clearDepthCommand_t *cmd = (clearDepthCommand_t const*)data;
 	
 	if(tess.numIndexes)
 		RB_EndSurface();
@@ -1044,9 +1080,10 @@ const void *RB_ClearDepth(const void *data)
 	// texture swapping test
 	if (r_showImages->integer)
 		RB_ShowImages();
-
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	qglClear(GL_DEPTH_BUFFER_BIT);
-	
+#endif
 	return (const void *)(cmd + 1);
 }
 
@@ -1070,7 +1107,8 @@ const void	*RB_SwapBuffers( const void *data ) {
 	}
 
 	cmd = (const swapBuffersCommand_t *)data;
-
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	// we measure overdraw by reading back the stencil buffer and
 	// counting up the number of increments that have happened
 	if ( r_measureOverdraw->integer ) {
@@ -1099,7 +1137,7 @@ const void	*RB_SwapBuffers( const void *data ) {
 	GLimp_EndFrame();
 
 	backEnd.projection2D = qfalse;
-
+#endif
 	return (const void *)(cmd + 1);
 }
 

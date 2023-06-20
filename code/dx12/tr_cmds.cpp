@@ -160,7 +160,7 @@ R_AddDrawSurfCmd
 void	R_AddDrawSurfCmd( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 	drawSurfsCommand_t	*cmd;
 
-	cmd = R_GetCommandBuffer( sizeof( *cmd ) );
+	cmd = (drawSurfsCommand_t*)R_GetCommandBuffer( sizeof( *cmd ) );
 	if ( !cmd ) {
 		return;
 	}
@@ -245,9 +245,9 @@ void RE_StretchPic ( float x, float y, float w, float h,
 #define MODE_GREEN_MAGENTA 4
 #define MODE_MAX	MODE_GREEN_MAGENTA
 
-void R_SetColorMode(GLboolean *rgba, stereoFrame_t stereoFrame, int colormode)
+void R_SetColorMode(qboolean *rgba, stereoFrame_t stereoFrame, int colormode)
 {
-	rgba[0] = rgba[1] = rgba[2] = rgba[3] = GL_TRUE;
+	rgba[0] = rgba[1] = rgba[2] = rgba[3] = qtrue;
 	
 	if(colormode > MODE_MAX)
 	{
@@ -262,22 +262,22 @@ void R_SetColorMode(GLboolean *rgba, stereoFrame_t stereoFrame, int colormode)
 	if(colormode == MODE_GREEN_MAGENTA)
 	{
 		if(stereoFrame == STEREO_LEFT)
-			rgba[0] = rgba[2] = GL_FALSE;
+			rgba[0] = rgba[2] = qfalse;
 		else if(stereoFrame == STEREO_RIGHT)
-			rgba[1] = GL_FALSE;
+			rgba[1] = qfalse;
 	}
 	else
 	{
 		if(stereoFrame == STEREO_LEFT)
-			rgba[1] = rgba[2] = GL_FALSE;
+			rgba[1] = rgba[2] = qfalse;
 		else if(stereoFrame == STEREO_RIGHT)
 		{
-			rgba[0] = GL_FALSE;
+			rgba[0] = qfalse;
 		
 			if(colormode == MODE_RED_BLUE)
-				rgba[1] = GL_FALSE;
+				rgba[1] = qfalse;
 			else if(colormode == MODE_RED_GREEN)
-				rgba[2] = GL_FALSE;
+				rgba[2] = qfalse;
 		}
 	}
 }
@@ -472,7 +472,6 @@ void RE_EndFrame( int *frontEndMsec, int *backEndMsec ) {
 	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
 	if (frontEndMsec) *frontEndMsec = 0;
 	if (backEndMsec) *backEndMsec = 0;
-	return 0;
 #if 0
 	swapBuffersCommand_t	*cmd;
 

@@ -189,7 +189,12 @@ static void InitOpenGL( void )
 	//		- r_ignorehwgamma
 	//		- r_gamma
 	//
-	ri.Printf(PRINT_ALL, __FUNCTION__ "\n");
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+}
+
+void R_LoadJPG(const char* filename, unsigned char** pic, int* width, int* height)
+{
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
 }
 
 /*
@@ -200,6 +205,9 @@ GL_CheckErrors
 void GL_CheckErrors( void ) {
 }
 
+void GLimp_LogComment(char* comment) {
+	//ri.Printf(PRINT_ALL, comment);
+}
 
 /*
 ** R_GetModeInfo
@@ -342,8 +350,6 @@ RB_TakeScreenshot
 */  
 void RB_TakeScreenshot(int x, int y, int width, int height, char *fileName)
 {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-#if 0
 	byte *allbuf, *buffer;
 	byte *srcptr, *destptr;
 	byte *endline, *endmem;
@@ -396,7 +402,6 @@ void RB_TakeScreenshot(int x, int y, int width, int height, char *fileName)
 	ri.FS_WriteFile(fileName, buffer, memcount + 18);
 
 	ri.Hunk_FreeTempMemory(allbuf);
-#endif
 }
 
 /* 
@@ -789,7 +794,7 @@ const void *RB_TakeVideoFrameCmd( const void *data )
 */
 void GL_SetDefaultState( void )
 {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
 #if 0
 	qglClearDepth( 1.0f );
 
@@ -973,8 +978,6 @@ R_Register
 */
 void R_Register( void ) 
 {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-#if 0
 	#ifdef USE_RENDERER_DLOPEN
 	com_altivec = ri.Cvar_Get("com_altivec", "1", CVAR_ARCHIVE);
 	#endif	
@@ -1127,8 +1130,7 @@ void R_Register( void )
 	ri.Cmd_AddCommand( "screenshot", R_ScreenShot_f );
 	ri.Cmd_AddCommand( "screenshotJPEG", R_ScreenShotJPEG_f );
 	ri.Cmd_AddCommand( "gfxinfo", GfxInfo_f );
-	ri.Cmd_AddCommand( "minimize", GLimp_Minimize );
-#endif
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__); //ri.Cmd_AddCommand( "minimize", GLimp_Minimize );
 }
 
 /*
@@ -1274,13 +1276,10 @@ Touch all images to make sure they are resident
 =============
 */
 void RE_EndRegistration( void ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-#if 0
 	R_IssuePendingRenderCommands();
 	if (!ri.Sys_LowPhysicalMemory()) {
 		RB_ShowImages();
 	}
-#endif
 }
 
 

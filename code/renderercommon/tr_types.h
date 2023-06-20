@@ -59,6 +59,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define RDF_NOWORLDMODEL	0x0001		// used for player configuration screen
 #define RDF_HYPERSPACE		0x0004		// teleportation effect
 
+#if defined (QDX12)
+// TODO: remove
+typedef unsigned int GLuint;
+typedef int GLint;
+#endif
+
 typedef struct {
 	vec3_t		xyz;
 	float		st[2];

@@ -254,9 +254,6 @@ R_MarkFragments
 */
 int R_MarkFragments( int numPoints, const vec3_t *points, const vec3_t projection,
 				   int maxPoints, vec3_t pointBuffer, int maxFragments, markFragment_t *fragmentBuffer ) {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-	return 0;
-#if 0
 	int				numsurfaces, numPlanes;
 	int				i, j, k, m, n;
 	surfaceType_t	*surfaces[64];
@@ -457,6 +454,5 @@ int R_MarkFragments( int numPoints, const vec3_t *points, const vec3_t projectio
 		}
 	}
 	return returnedFragments;
-#endif
 }
 

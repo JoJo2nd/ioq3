@@ -269,7 +269,7 @@ void RB_ClipSkyPolygons( shaderCommands_t *input )
 		for (j = 0 ; j < 3 ; j++) 
 		{
 			VectorSubtract( input->xyz[input->indexes[i+j]],
-							backEnd.viewParms.or.origin, 
+							backEnd.viewParms.orient.origin, 
 							p[j] );
 		}
 		ClipSkyPolygon( 3, p[0], 0 );
@@ -363,6 +363,8 @@ static float	s_skyTexCoords[SKY_SUBDIVISIONS+1][SKY_SUBDIVISIONS+1][2];
 
 static void DrawSkySide( struct image_s *image, const int mins[2], const int maxs[2] )
 {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	int s, t;
 
 	GL_Bind( image );
@@ -382,6 +384,7 @@ static void DrawSkySide( struct image_s *image, const int mins[2], const int max
 
 		qglEnd();
 	}
+#endif
 }
 
 static void DrawSkyBox( shader_t *shader )
@@ -467,7 +470,7 @@ static void FillCloudySkySide( const int mins[2], const int maxs[2], qboolean ad
 	{
 		for ( s = mins[0]+HALF_SKY_SUBDIVISIONS; s <= maxs[0]+HALF_SKY_SUBDIVISIONS; s++ )
 		{
-			VectorAdd( s_skyPoints[t][s], backEnd.viewParms.or.origin, tess.xyz[tess.numVertexes] );
+			VectorAdd( s_skyPoints[t][s], backEnd.viewParms.orient.origin, tess.xyz[tess.numVertexes] );
 			tess.texCoords[tess.numVertexes][0][0] = s_skyTexCoords[t][s][0];
 			tess.texCoords[tess.numVertexes][0][1] = s_skyTexCoords[t][s][1];
 
@@ -595,7 +598,7 @@ static void FillCloudBox( const shader_t *shader, int stage )
 		}
 
 		// only add indexes for first stage
-		FillCloudySkySide( sky_mins_subd, sky_maxs_subd, ( stage == 0 ) );
+		FillCloudySkySide( sky_mins_subd, sky_maxs_subd, qboolean( stage == 0 ) );
 	}
 }
 
@@ -705,7 +708,8 @@ void RB_DrawSun( float scale, shader_t *shader ) {
 	if ( !backEnd.skyRenderedThisView ) {
 		return;
 	}
-
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	qglLoadMatrixf( backEnd.viewParms.world.modelMatrix );
 	qglTranslatef (backEnd.viewParms.or.origin[0], backEnd.viewParms.or.origin[1], backEnd.viewParms.or.origin[2]);
 
@@ -730,6 +734,7 @@ void RB_DrawSun( float scale, shader_t *shader ) {
 
 	// back to normal depth range
 	qglDepthRange( 0.0, 1.0 );
+#endif
 }
 
 
@@ -753,7 +758,8 @@ void RB_StageIteratorSky( void ) {
 	// the sky box to see which blocks on each side need
 	// to be drawn
 	RB_ClipSkyPolygons( &tess );
-
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	// r_showsky will let all the sky blocks be drawn in
 	// front of everything to allow developers to see how
 	// much sky is getting sucked in
@@ -789,6 +795,7 @@ void RB_StageIteratorSky( void ) {
 	// back to normal depth range
 	qglDepthRange( 0.0, 1.0 );
 
+#endif
 	// note that sky was drawn so we will draw a sun later
 	backEnd.skyRenderedThisView = qtrue;
 }

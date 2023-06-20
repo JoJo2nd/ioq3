@@ -138,7 +138,7 @@ void RB_AddFlare( void *surface, int fogNum, vec3_t point, vec3_t color, vec3_t 
 
 	if(normal && (normal[0] || normal[1] || normal[2]))
 	{
-		VectorSubtract( backEnd.viewParms.or.origin, point, local );
+		VectorSubtract( backEnd.viewParms.orient.origin, point, local );
 		VectorNormalizeFast(local);
 		d = DotProduct(local, normal);
 
@@ -149,7 +149,7 @@ void RB_AddFlare( void *surface, int fogNum, vec3_t point, vec3_t color, vec3_t 
 
 	// if the point is off the screen, don't bother adding it
 	// calculate screen coordinates and depth
-	R_TransformModelToClip( point, backEnd.or.modelMatrix, 
+	R_TransformModelToClip( point, backEnd.orient.modelMatrix, 
 		backEnd.viewParms.projectionMatrix, eye, clip );
 
 	// check to see if the point is completely off screen
@@ -279,7 +279,8 @@ void RB_TestFlare( flare_t *f ) {
 	float			screenZ;
 
 	backEnd.pc.c_flareTests++;
-
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	// doing a readpixels is as good as doing a glFinish(), so
 	// don't bother with another sync
 	glState.finishCalled = qfalse;
@@ -314,6 +315,7 @@ void RB_TestFlare( flare_t *f ) {
 	}
 
 	f->drawIntensity = fade;
+#endif
 }
 
 
@@ -472,7 +474,7 @@ void RB_RenderFlares (void) {
 	// Reset currentEntity to world so that any previously referenced entities
 	// don't have influence on the rendering of these flares (i.e. RF_ renderer flags).
 	backEnd.currentEntity = &tr.worldEntity;
-	backEnd.or = backEnd.viewParms.world;
+	backEnd.orient = backEnd.viewParms.world;
 
 //	RB_AddDlightFlares();
 
@@ -510,7 +512,8 @@ void RB_RenderFlares (void) {
 	if ( !draw ) {
 		return;		// none visible
 	}
-
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	if ( backEnd.viewParms.isPortal ) {
 		qglDisable (GL_CLIP_PLANE0);
 	}
@@ -535,5 +538,6 @@ void RB_RenderFlares (void) {
 	qglPopMatrix();
 	qglMatrixMode( GL_MODELVIEW );
 	qglPopMatrix();
+#endif
 }
 

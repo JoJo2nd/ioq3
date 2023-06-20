@@ -60,6 +60,8 @@ void R_AddEdgeDef( int i1, int i2, int facing ) {
 }
 
 void R_RenderShadowEdges( void ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	int		i;
 
 #if 0
@@ -138,6 +140,7 @@ void R_RenderShadowEdges( void ) {
 		}
 	}
 #endif
+#endif
 }
 
 /*
@@ -153,6 +156,8 @@ triangleFromEdge[ v1 ][ v2 ]
 =================
 */
 void RB_ShadowTessEnd( void ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	int		i;
 	int		numTris;
 	vec3_t	lightDir;
@@ -230,6 +235,7 @@ void RB_ShadowTessEnd( void ) {
 
 	// reenable writing to the color buffer
 	qglColorMask(rgba[0], rgba[1], rgba[2], rgba[3]);
+#endif
 }
 
 
@@ -244,6 +250,8 @@ overlap and double darken.
 =================
 */
 void RB_ShadowFinish( void ) {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+#if 0
 	if ( r_shadows->integer != 2 ) {
 		return;
 	}
@@ -275,6 +283,7 @@ void RB_ShadowFinish( void ) {
 
 	qglColor4f(1,1,1,1);
 	qglDisable( GL_STENCIL_TEST );
+#endif
 }
 
 
@@ -296,11 +305,11 @@ void RB_ProjectionShadowDeform( void ) {
 
 	xyz = ( float * ) tess.xyz;
 
-	ground[0] = backEnd.or.axis[0][2];
-	ground[1] = backEnd.or.axis[1][2];
-	ground[2] = backEnd.or.axis[2][2];
+	ground[0] = backEnd.orient.axis[0][2];
+	ground[1] = backEnd.orient.axis[1][2];
+	ground[2] = backEnd.orient.axis[2][2];
 
-	groundDist = backEnd.or.origin[2] - backEnd.currentEntity->e.shadowPlane;
+	groundDist = backEnd.orient.origin[2] - backEnd.currentEntity->e.shadowPlane;
 
 	VectorCopy( backEnd.currentEntity->lightDir, lightDir );
 	d = DotProduct( lightDir, ground );

@@ -87,9 +87,12 @@ GLimp_Shutdown
 */
 void GLimp_Shutdown( void )
 {
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
+#if 0
 	ri.IN_Shutdown();
 
 	SDL_QuitSubSystem( SDL_INIT_VIDEO );
+#endif
 }
 
 /*

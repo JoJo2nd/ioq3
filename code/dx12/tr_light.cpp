@@ -39,15 +39,15 @@ Used by both the front end (for DlightBmodel) and
 the back end (before doing the lighting calculation)
 ===============
 */
-void R_TransformDlights( int count, dlight_t *dl, orientationr_t *or) {
+void R_TransformDlights( int count, dlight_t *dl, orientationr_t *orient) {
 	int		i;
 	vec3_t	temp;
 
 	for ( i = 0 ; i < count ; i++, dl++ ) {
-		VectorSubtract( dl->origin, or->origin, temp );
-		dl->transformed[0] = DotProduct( temp, or->axis[0] );
-		dl->transformed[1] = DotProduct( temp, or->axis[1] );
-		dl->transformed[2] = DotProduct( temp, or->axis[2] );
+		VectorSubtract( dl->origin, orient->origin, temp );
+		dl->transformed[0] = DotProduct( temp, orient->axis[0] );
+		dl->transformed[1] = DotProduct( temp, orient->axis[1] );
+		dl->transformed[2] = DotProduct( temp, orient->axis[2] );
 	}
 }
 
@@ -65,7 +65,7 @@ void R_DlightBmodel( bmodel_t *bmodel ) {
 	msurface_t	*surf;
 
 	// transform all the lights
-	R_TransformDlights( tr.refdef.num_dlights, tr.refdef.dlights, &tr.or );
+	R_TransformDlights( tr.refdef.num_dlights, tr.refdef.dlights, &tr.orient );
 
 	mask = 0;
 	for ( i=0 ; i<tr.refdef.num_dlights ; i++ ) {
@@ -88,7 +88,7 @@ void R_DlightBmodel( bmodel_t *bmodel ) {
 		mask |= 1 << i;
 	}
 
-	tr.currentEntity->needDlights = (mask != 0);
+	tr.currentEntity->needDlights = qboolean(mask != 0);
 
 	// set the dlight bits in all the surfaces
 	for ( i = 0 ; i < bmodel->numSurfaces ; i++ ) {
@@ -384,9 +384,6 @@ R_LightForPoint
 */
 int R_LightForPoint( vec3_t point, vec3_t ambientLight, vec3_t directedLight, vec3_t lightDir )
 {
-	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ ")\n");
-	return qfalse;
-#if 0
 	trRefEntity_t ent;
 	
 	if ( tr.world->lightGridData == NULL )
@@ -400,5 +397,4 @@ int R_LightForPoint( vec3_t point, vec3_t ambientLight, vec3_t directedLight, ve
 	VectorCopy(ent.lightDir, lightDir);
 
 	return qtrue;
-#endif
 }
