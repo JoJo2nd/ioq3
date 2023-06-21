@@ -784,7 +784,7 @@ static void Upload32( unsigned *data,
 		Com_Memcpy( scaledBuffer, data, width * height * 4 );
 	}
 
-	R_LightScaleTexture (scaledBuffer, scaled_width, scaled_height, qboolean(!mipmap) );
+	R_LightScaleTexture (scaledBuffer, scaled_width, scaled_height, !mipmap );
 
 	*pUploadWidth = scaled_width;
 	*pUploadHeight = scaled_height;
@@ -910,10 +910,10 @@ image_t *R_CreateImage( const char *name, byte *pic, int width, int height,
 	GL_Bind(image);
 #endif
 	Upload32( (unsigned *)pic, image->width, image->height, 
-								qboolean(image->flags & IMGFLAG_MIPMAP),
-								qboolean(image->flags & IMGFLAG_PICMIP),
+								(image->flags & IMGFLAG_MIPMAP),
+								(image->flags & IMGFLAG_PICMIP),
 								isLightmap,
-								qboolean(!(image->flags & IMGFLAG_NO_COMPRESSION)),
+								(!(image->flags & IMGFLAG_NO_COMPRESSION)),
 								&image->internalFormat,
 								&image->uploadWidth,
 								&image->uploadHeight );
@@ -1276,7 +1276,7 @@ void R_CreateBuiltinImages( void ) {
 
 	for(x=0;x<32;x++) {
 		// scratchimage is usually used for cinematic drawing
-		tr.scratchImage[x] = R_CreateImage("*scratch", (byte *)data, DEFAULT_SIZE, DEFAULT_SIZE, IMGTYPE_COLORALPHA, imgFlags_t(IMGFLAG_PICMIP | IMGFLAG_CLAMPTOEDGE), 0);
+		tr.scratchImage[x] = R_CreateImage("*scratch", (byte *)data, DEFAULT_SIZE, DEFAULT_SIZE, IMGTYPE_COLORALPHA, IMGFLAG_PICMIP | IMGFLAG_CLAMPTOEDGE, 0);
 	}
 
 	R_CreateDlightImage();

@@ -192,6 +192,15 @@ static void InitOpenGL( void )
 	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
 }
 
+static void InitDX12() {
+	QDX12_CreateWindow();
+
+	//TODO: swap glConfig for gfxCaps
+	glConfig.maxTextureSize = 4096; // needed by R_CreateImage
+	glConfig.numTextureUnits = 32;
+
+}
+
 void R_LoadJPG(const char* filename, unsigned char** pic, int* width, int* height)
 {
 	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
@@ -409,6 +418,12 @@ void RB_TakeScreenshot(int x, int y, int width, int height, char *fileName)
 RB_TakeScreenshotJPEG
 ================== 
 */
+void RE_SaveJPG(char* filename, int quality, int image_width, int image_height,
+	unsigned char* image_buffer, int padding)
+{
+	ri.Printf(PRINT_ALL, "STUB(" __FUNCTION__ "(%u):\n", __LINE__);
+}
+
 
 void RB_TakeScreenshotJPEG(int x, int y, int width, int height, char *fileName)
 {
@@ -1208,6 +1223,7 @@ void R_Init( void ) {
 	R_InitNextFrame();
 
 	InitOpenGL();
+	InitDX12();
 
 	R_InitImages();
 

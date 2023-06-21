@@ -874,8 +874,6 @@ static qboolean R_LoadMDR( model_t *mod, void *buffer, int filesize, const char 
 ** RE_BeginRegistration
 */
 void RE_BeginRegistration( glconfig_t *glconfigOut ) {
-
-#if 0
 	R_Init();
 
 	*glconfigOut = glConfig;
@@ -887,7 +885,6 @@ void RE_BeginRegistration( glconfig_t *glconfigOut ) {
 	RE_ClearScene();
 
 	tr.registered = qtrue;
-#endif
 }
 
 //=============================================================================

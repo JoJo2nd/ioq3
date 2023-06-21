@@ -204,7 +204,7 @@ static	void R_LoadLightmaps( lump_t *l ) {
 		}
 		tr.lightmaps[i] = R_CreateImage( va("*lightmap%d",i), image, 
 			LIGHTMAP_SIZE, LIGHTMAP_SIZE, IMGTYPE_COLORALPHA,
-			imgFlags_t(IMGFLAG_NOLIGHTSCALE | IMGFLAG_NO_COMPRESSION | IMGFLAG_CLAMPTOEDGE), 0 );
+			IMGFLAG_NOLIGHTSCALE | IMGFLAG_NO_COMPRESSION | IMGFLAG_CLAMPTOEDGE, 0 );
 	}
 
 	if ( r_lightmap->integer == 2 )	{
@@ -1206,7 +1206,7 @@ void R_MovePatchSurfacesToHunk(void) {
 			continue;
 		//
 		size = (grid->width * grid->height - 1) * sizeof( drawVert_t ) + sizeof( *grid );
-		hunkgrid = (srfGridMesh_s*)ri.Hunk_Alloc( size, h_low );
+		hunkgrid = ri.Hunk_Alloc( size, h_low );
 		Com_Memcpy(hunkgrid, grid, size);
 
 		hunkgrid->widthLodError = (float*)ri.Hunk_Alloc( grid->width * 4, h_low );

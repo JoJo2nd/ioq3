@@ -637,7 +637,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 			else
 			{
 				imgType_t type = IMGTYPE_COLORALPHA;
-				uint32_t flags = IMGFLAG_NONE;
+				imgFlags_t flags = IMGFLAG_NONE;
 
 				if (!shader.noMipMaps)
 					flags |= IMGFLAG_MIPMAP;
@@ -645,7 +645,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 				if (!shader.noPicMip)
 					flags |= IMGFLAG_PICMIP;
 
-				stage->bundle[0].image[0] = R_FindImageFile( token, type, imgFlags_t(flags) );
+				stage->bundle[0].image[0] = R_FindImageFile( token, type, flags );
 
 				if ( !stage->bundle[0].image[0] )
 				{
@@ -660,7 +660,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 		else if ( !Q_stricmp( token, "clampmap" ) )
 		{
 			imgType_t type = IMGTYPE_COLORALPHA;
-			uint32_t flags = IMGFLAG_CLAMPTOEDGE;
+			imgFlags_t flags = IMGFLAG_CLAMPTOEDGE;
 
 			token = COM_ParseExt( text, qfalse );
 			if ( !token[0] )
@@ -675,7 +675,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 			if (!shader.noPicMip)
 				flags |= IMGFLAG_PICMIP;
 
-			stage->bundle[0].image[0] = R_FindImageFile( token, type, imgFlags_t(flags) );
+			stage->bundle[0].image[0] = R_FindImageFile( token, type, flags );
 			if ( !stage->bundle[0].image[0] )
 			{
 				ri.Printf( PRINT_WARNING, "WARNING: R_FindImageFile could not find '%s' in shader '%s'\n", token, shader.name );
@@ -707,7 +707,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 				}
 				num = stage->bundle[0].numImageAnimations;
 				if ( num < MAX_IMAGE_ANIMATIONS ) {
-					uint32_t flags = IMGFLAG_NONE;
+					imgFlags_t flags = IMGFLAG_NONE;
 
 					if (!shader.noMipMaps)
 						flags |= IMGFLAG_MIPMAP;
@@ -715,7 +715,7 @@ static qboolean ParseStage( shaderStage_t *stage, char **text )
 					if (!shader.noPicMip)
 						flags |= IMGFLAG_PICMIP;
 
-					stage->bundle[0].image[num] = R_FindImageFile( token, IMGTYPE_COLORALPHA, imgFlags_t(flags) );
+					stage->bundle[0].image[num] = R_FindImageFile( token, IMGTYPE_COLORALPHA, flags );
 					if ( !stage->bundle[0].image[num] )
 					{
 						ri.Printf( PRINT_WARNING, "WARNING: R_FindImageFile could not find '%s' in shader '%s'\n", token, shader.name );
@@ -1145,7 +1145,7 @@ static void ParseDeform( char **text ) {
 		if ( n < 0 || n > 7 ) {
 			n = 0;
 		}
-		ds->deformation = deform_t((DEFORM_TEXT0) + n);
+		ds->deformation = (DEFORM_TEXT0) + n;
 		return;
 	}
 
@@ -1257,7 +1257,7 @@ static void ParseSkyParms( char **text ) {
 	static char	const* suf[6] = {"rt", "bk", "lf", "ft", "up", "dn"};
 	char		pathname[MAX_QPATH];
 	int			i;
-	imgFlags_t imgFlags = imgFlags_t(IMGFLAG_MIPMAP | IMGFLAG_PICMIP);
+	imgFlags_t imgFlags = IMGFLAG_MIPMAP | IMGFLAG_PICMIP;
 
 	// outerbox
 	token = COM_ParseExt( text, qfalse );
@@ -1269,7 +1269,7 @@ static void ParseSkyParms( char **text ) {
 		for (i=0 ; i<6 ; i++) {
 			Com_sprintf( pathname, sizeof(pathname), "%s_%s.tga"
 				, token, suf[i] );
-			shader.sky.outerbox[i] = R_FindImageFile( ( char * ) pathname, IMGTYPE_COLORALPHA, imgFlags_t(imgFlags | IMGFLAG_CLAMPTOEDGE) );
+			shader.sky.outerbox[i] = R_FindImageFile( ( char * ) pathname, IMGTYPE_COLORALPHA, imgFlags | IMGFLAG_CLAMPTOEDGE );
 
 			if ( !shader.sky.outerbox[i] ) {
 				shader.sky.outerbox[i] = tr.defaultImage;
@@ -2591,7 +2591,7 @@ shader_t *R_FindShader( const char *name, int lightmapIndex, qboolean mipRawImag
 			flags |= IMGFLAG_CLAMPTOEDGE;
 		}
 
-		image = R_FindImageFile( name, IMGTYPE_COLORALPHA, imgFlags_t(flags) );
+		image = R_FindImageFile( name, IMGTYPE_COLORALPHA, flags );
 		if ( !image ) {
 			ri.Printf( PRINT_DEVELOPER, "Couldn't find image file for shader %s\n", name );
 			shader.defaultShader = qtrue;

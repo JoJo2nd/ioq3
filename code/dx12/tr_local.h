@@ -1801,4 +1801,16 @@ void RB_CalcDiffuseColor_altivec( unsigned char *colors );
 #define DX12_LUMINANCE				0x1909
 #define DX12_LUMINANCE_ALPHA			0x190A
 
+/*
+=============================================================
+
+	DX12 functions (because C <-> C++)
+
+=============================================================
+*/
+
+typedef struct dx12_context dx12_context_t; // may unhide later
+
+dx12_context_t* QDX12_CreateWindow();
+
 #endif //TR_LOCAL_H
